@@ -1,0 +1,24 @@
+!to "kernel.binre", plain
+* = $500
+
+sec						; set carry flag
+xce						; enable 16 bit modus
+
+lda     #$01
+mmu     #$00    		; set bus to 1
+
+lda     $0300  
+mmu     #$0A    		; set bus offset to 0x0300
+
+mmu     #$02    		; enable bus
+
+lda 	#$00
+sta		$0300 			; set row to 0
+
+sta		$0301;			; set cursor x to 0
+sta		$0302;			; set cursor y to 0
+
+lda     #$48
+sta     $0310   		; set first character on the current row to H
+
+inc     $0x301			; increment cursor position
