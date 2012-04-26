@@ -1,4 +1,4 @@
-!to "disk_25bb1a1252c61054.img", plain
+!to "bootlogo.img", plain
 * = $500
 
 pbuffer = $60
