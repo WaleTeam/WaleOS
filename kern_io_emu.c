@@ -31,19 +31,8 @@ error_t _kern_boot() {
 	return ERROR_NONE;
 }
 
-error_t _kern_screate(streamh_t directory, char *name, protocol_t type) {
-	return ERROR_NONE;
-}
-
 error_t _kern_read(streamh_t sh, void *buffer, k_size_t *read_byte_count) {
-
-	printf("protocol type: %i\n", sh);
-
 	struct stream_handle *h = &stream_handles[sh];
-
-	printf("handle is %i -> %i\n", &stream_handles, &stream_handles[sh]);
-	printf("handle type is %i\n", h->protocol);
-
 	struct driver_callback *callback = &driver_callbacks[h->protocol];
 
 	if(callback == 0) {
@@ -87,6 +76,11 @@ error_t _kern_stat_h(streamh_t sh, struct stream_stat *stat_buffer, k_size_t buf
 //#############################################################################
 // higher level fs access
 //#############################################################################
+
+error_t _kern_screate(char *path, protocol_t type) {
+
+}
+
 error_t _kern_fwrite(streamh_t sh, void *buffer, k_size_t *write_byte_count) {
 	return ERROR_NONE;
 }

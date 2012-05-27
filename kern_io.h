@@ -77,7 +77,6 @@ struct driver_callback {
 	_write_fc *write_fc;
 };
 
-error_t _kern_screate(streamh_t directory, char *name, protocol_t type);
 error_t _kern_read(streamh_t sh, void *buffer, k_size_t *read_byte_count);
 error_t _kern_write(streamh_t sh, void *buffer, k_size_t *write_byte_count);
 streamh_t _kern_open(streamh_t directory, char *name, mode_t mode);
@@ -86,6 +85,10 @@ streamh_t _kern_reopen(streamh_t sh);
 error_t _kern_stat(streamh_t directory, char *name, struct stream_stat *stat_buffer, k_size_t buffer_size);
 error_t _kern_stat_h(streamh_t sh, struct stream_stat *stat_buffer, k_size_t buffer_size);
 
+//#############################################################################
+// ## higher level fs access
+//#############################################################################
+error_t _kern_screate(char *path, protocol_t type);
 error_t _kern_fwrite(streamh_t sh, void *buffer, k_size_t *write_byte_count);
 error_t _kern_fread(streamh_t sh, void *buffer, k_size_t *read_byte_count);
 error_t _kern_fopen(char *path, mode_t mode);
