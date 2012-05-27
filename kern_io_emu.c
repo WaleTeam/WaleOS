@@ -27,10 +27,6 @@ struct driver_callback driver_callbacks[] = {
 //#############################################################################
 // raw fs access
 //#############################################################################
-error_t _kern_boot() {
-	return ERROR_NONE;
-}
-
 error_t _kern_read(streamh_t sh, void *buffer, k_size_t *read_byte_count) {
 	struct stream_handle *h = &stream_handles[sh];
 	struct driver_callback *callback = &driver_callbacks[h->protocol];
