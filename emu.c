@@ -1,5 +1,6 @@
 #include "emu.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <memory.h>
 #include <stdarg.h>
 
@@ -20,4 +21,16 @@ int _kern_printf(char* fmt, ...) {
 
 void *_kern_memcpy (void *destination, const void *source, int num) {
 	return memcpy(destination, source, num);
+}
+
+void * _kern_malloc(int size) {
+	return malloc(size);
+}
+
+void _kern_free(void *ptr) {
+	return free(ptr);
+}
+
+void *_kern_realloc(void *ptr, int size) {
+	return realloc(ptr, size);
 }

@@ -14,9 +14,10 @@ struct stream_entry root_stream[ROOT_STREAM_COUNT] = {
 
 error_t _dir_read(struct stream_handle *h, void *buffer, k_size_t *read_byte_count) {
 
-	int dir_size = sizeof(root_stream);
+	k_size_t dir_size = sizeof(root_stream);
 
 	if(*read_byte_count < dir_size) {
+		*read_byte_count = dir_size;
 		return ERROR_GENERIC;
 	}
 
