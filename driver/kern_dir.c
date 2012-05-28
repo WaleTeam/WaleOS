@@ -4,6 +4,8 @@
 
 #define ROOT_STREAM_COUNT 	10
 
+char *dinge = "dinge";
+
 int root_stream_size = ROOT_STREAM_COUNT;
 int root_stream_count = 2;
 struct stream_entry root_stream[ROOT_STREAM_COUNT] = {

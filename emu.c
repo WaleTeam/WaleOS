@@ -11,7 +11,7 @@ int _kern_printf(char* fmt, ...) {
 
 	va_start(ap, fmt); /* Initialize the va_list */
 
-	retval = printf(fmt, ap); /* Call vprintf */
+	retval = vprintf(fmt, ap); /* Call vprintf */
 
 	va_end(ap); /* Cleanup the va_list */
 
