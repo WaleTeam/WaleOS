@@ -1,0 +1,250 @@
+!to "bootlogo.img", plain
+* = $500
+
+pbuffer = $60
+poffset = $62
+
+main:
+
+; INITIALIZE REDBUS
+jsr      set16bit
+
+rep     #$30                    ; 16-bit registers
+!al
+!rl
+
+lda     #$0300
+mmu     #$01                    ; set redbus offset to $0300
+
+mmu     #$02                    ; enable redbus
+
+; SETUP DISPLAY
+sep     #$20                    ; 8-bit a register
+!as
+
+lda      $01
+mmu     #$00                    ; select display
+
+ldx     #$0300
+
+stz      $00, X                 ; row to 0
+stz      $01, X                 ; cursor x to 0
+stz      $02, X                 ; cursor y to 0
+stz      $03, X                 ; cursor mode to hidden
+
+; SET UP POINTERS
+rep     #$20                    ; 16-bit a register
+!al
+
+lda     #logo
+sta      pbuffer                ; set pbuffer
+
+lda     #$0310 + $a
+sta      poffset                ; set bus offset
+
+sep     #$20                    ; 8-bit a register
+!as
+
+jsr     clear_screen
+
+print_row:
+jsr     read_pbuffer
+
+!as
+cmp     #$00
+beq      inc_row
+
+
+sta     (poffset)
+
+inc      poffset
+jsr      inc_pbuffer
+
+
+jmp      print_row
+
+
+inc_row:
+lda     #$AB
+jsr      inc_pbuffer
+
+jsr      read_pbuffer
+
+!as
+cmp     #$00
+beq      end                    ; finish if character is \0
+
+jsr      set8bit
+inc      $0300                  ; increment row
+
+jsr      set16bit
+rep     #$10                    ; 16-bit x, y registers
+!rl
+
+ldy     #$0310 + $a
+sty      poffset                ; reset bus offset
+
+jmp     print_row
+
+
+read_pbuffer:
+rep     #$20                    ; 16-bit a register
+!al
+
+lda     (pbuffer)
+
+sep     #$20                    ; 8-bit a register
+!as
+
+rts
+
+end:
+jmp      end                    ; loop forever
+
+inc_pbuffer:
+inc      pbuffer
+
+lda      pbuffer
+bne      skip_carry
+inc      pbuffer + 1
+skip_carry:
+rts
+
+clear_screen:
+ldx     #$0300
+
+lda     #$01
+sta      $07, X                 ; blit mode to 1
+
+lda     #$20
+sta      $08, X                 ; blit value to ' '
+
+stz      $0A, X                 ; blit x to 0
+stz      $0B, X                 ; blit y to 0
+
+lda     #$50
+sta      $0C, X                 ; blit width to 80
+
+lda     #$32
+sta      $0D, X                 ; blit height to 50
+
+clear_screen_wait:
+lda      $07, X
+bne      clear_screen_wait
+
+rts
+
+; SUBROUTINES
+set8bit:
+sec                             ; set carry flag to 1
+xce                             ; set emulation flag to carry flag
+rts
+
+set16bit:
+clc                             ; set carry flag to 0
+xce                             ; set emulation flag to carry flag
+rts
+
+
+; DATA
+logo:
+!text " "
+!byte $0
+!text " "
+!byte $0
+!text "                         ...                    "
+!byte $0
+!text "                        .......                 "
+!byte $0
+!text "                  .,::,,,i:,,::i:iii,.          "
+!byte $0
+!text "                ,,:,,,,.::i,,,,,,...:v.         "
+!byte $0
+!text "              .:.,.,.,,,,,.,,:,..,iS8BZ         "
+!byte $0
+!text "              i,,,,.....,,,,,,.,C6EZ96#i        "
+!byte $0
+!text "             cYv;;;;ii::,:,,,.:bb9zU2AE9        "
+!byte $0
+!text "             Y;i;i;i;i;i;i;::.ZZIzIzU2E0        "
+!byte $0
+!text "             C;ii;iiiiiii;i;:C8IoIoUzUbQ        "
+!byte $0
+!text "             7;iiiiiii;i;i;i:z8oIoIzU2b0        "
+!byte $0
+!text "             7i;iii;i;iii;ii:66IoI2U268W        "
+!byte $0
+!text "             Y;i;i;i;i;i;i;i:I6II2U2UIbW        "
+!byte $0
+!text "             X;;i;i;i;i;i;;i:66UIAUAIAZ$        "
+!byte $0
+!text "             7;i;i;i;i;;;i;iiA9I80W89Ib$        "
+!byte $0
+!text "             C;;i;i;i;i;;;ii:6ZE0i.Zb9Z$,  ...  "
+!byte $0
+!text "             X;i;i;i;i;;;;;ii6EW.   bb8QY,;7X2C "
+!byte $0
+!text "             t;;i;i;;;i;;;;;iZWn .M..W6W;i;vvU  "
+!byte $0
+!text "             Xci;;;;v;;;v;vii8#,  MM bb0vi;io;  "
+!byte $0
+!text "             tv;;v;;i;;v;v;;ibW   MM.2ZEv;;;Zi  "
+!byte $0
+!text "             Cv;;;;;;;v;;;;iibW 70MM,1bb7iv;0i  "
+!byte $0
+!text "             C;;;;;v;;;v;c;;iEB 9MMM.I6bS;i7#:  "
+!byte $0
+!text "             Cv:iii;;;v;v;v;iZ# :MMM.8Z6bzUb@.  "
+!byte $0
+!text "             o#WCv:i:ii;i;i;i8BC MM:;EA668Zb@.  "
+!byte $0
+!text "             S.CMM@EA1CY7YtYi9b#.  ,QA9U6A6Z@   "
+!byte $0
+!text "             oi  ;UW$@@@##Z7i89b$1tWA9IAA6ABQ   "
+!byte $0
+!text "             n7Y;.         :v98IbWQU6U6I6I6MY   "
+!byte $0
+!text "             2cYc777v;iiivYY;Z962AI6UAI6U6$M    "
+!byte $0
+!text "             o7vcvYv7Y77CYY;v9bUAU6U6U6I9#@i    "
+!byte $0
+!text "             zYY;YvYcYcYY7YY;b99U6I6UAzb@$,     "
+!byte $0
+!text "             tt;vvYvYvYcYcYvv68U6U6IAIQMb.      "
+!byte $0
+!text "             .01;v;vvccYvYY7;996U6IAU$Mt        "
+!byte $0
+!text "              ,BESCvv;v;cc7cvCEA6IA6@#;         "
+!byte $0
+!text "               iE$BWbUtXcc;c;;IbIAEME,          "
+!byte $0
+!text "                 .vo0$#WE62CCc7A0$Mn.           "
+!byte $0
+!text "                     ,vI0$$$009E##;             "
+!byte $0
+!text "                         .co0Q0AY.              "
+!byte $0
+!text " "
+!byte $0
+!text " "
+!byte $0
+!text "888       888          888           .d88888b.   .d8888b.  "
+!byte $0
+!text "888   o   888          888          d88P\" \"Y88b d88P  Y88b "
+!byte $0
+!text "888  d8b  888          888          888     888 Y88b.      "
+!byte $0
+!text "888 d888b 888  8888b.  888  .d88b.  888     888  \"Y888b.   "
+!byte $0
+!text "888d88888b888     \"88b 888 d8P  Y8b 888     888     \"Y88b. "
+!byte $0
+!text "88888P Y88888 .d888888 888 88888888 888     888       \"888 "
+!byte $0
+!text "8888P   Y8888 888  888 888 Y8b.     Y88b. .d88P Y88b  d88P "
+!byte $0
+!text "888P     Y888 \"Y888888 888  \"Y8888   \"Y88888P\"   \"Y8888P\"  "
+!byte $0
+!text " "
+!word $0
+                                                  
+!align 128, 128
