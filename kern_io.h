@@ -1,8 +1,7 @@
 #ifndef _KERNEL_KERN_IO_H_INCLUDED_
 #define _KERNEL_KERN_IO_H_INCLUDED_
 
-#include "types.h"
-#include "error.h"
+#include "stdinc.h"
 
 //#############################################################################
 // ## default handles

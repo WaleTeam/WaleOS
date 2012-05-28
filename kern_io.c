@@ -2,8 +2,6 @@
 #include "driver/kern_stream.h"
 #include "driver/kern_dir.h"
 
-#include <stdio.h>
-
 #define STREAM_HANDLE_SIZE 32
 
 //#############################################################################
@@ -74,7 +72,7 @@ error_t _kern_stat_h(streamh_t sh, struct stream_stat *stat_buffer, k_size_t buf
 //#############################################################################
 
 error_t _kern_screate(char *path, protocol_t type) {
-
+	return ERROR_NONE;
 }
 
 error_t _kern_fwrite(streamh_t sh, void *buffer, k_size_t *write_byte_count) {

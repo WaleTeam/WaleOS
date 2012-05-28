@@ -1,5 +1,5 @@
 #include "kern_dir.h"
-#include "emu.h"
+#include <memory.h>
 
 
 #define ROOT_STREAM_COUNT 	10
@@ -20,7 +20,7 @@ error_t _dir_read(struct stream_handle *h, void *buffer, k_size_t *read_byte_cou
 
 	*read_byte_count = dir_size;
 
-	_kern_memcpy(buffer, &root_stream, dir_size);
+	memcpy(buffer, &root_stream, dir_size);
 
 	return ERROR_NONE;
 }

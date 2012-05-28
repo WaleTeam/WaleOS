@@ -1,6 +1,7 @@
 
+#include "stdinc.h"
 #include "kern_io.h"
-#include <stdio.h>
+
 
 error_t _kern_boot();
 
@@ -13,10 +14,10 @@ int main() {
 
 	if((errno = _kern_read(SH_ROOT_STREAM, testbuffer, &size)) == ERROR_NONE) {
 
-		printf("directory read: %i\n", size);
-		printf("%s\n", testbuffer);
+		_kern_printf("directory read: %i\n", size);
+		_kern_printf("buffer: %s\n", testbuffer);
 	} else {
-		printf("error code: %i\n", errno);
+		_kern_printf("error code: %i\n", errno);
 	}
 
 	return ERROR_NONE;
