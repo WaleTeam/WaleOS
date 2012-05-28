@@ -1,4 +1,4 @@
 WaleOS
 ======
 
-Test
+This code is currently all experimental. Nothing works yet.
