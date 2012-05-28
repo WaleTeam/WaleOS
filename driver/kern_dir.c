@@ -9,7 +9,7 @@ char *dinge = "dinge";
 int root_stream_size = ROOT_STREAM_COUNT;
 int root_stream_count = 2;
 struct stream_entry root_stream[ROOT_STREAM_COUNT] = {
-	{"dev"}, {"net"}
+	{"dev"}, {"net"}, {"\x00"}
 };
 
 error_t _dir_read(struct stream_handle *h, void *buffer, k_size_t *read_byte_count) {
